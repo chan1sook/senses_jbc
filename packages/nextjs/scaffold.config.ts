@@ -1,3 +1,4 @@
+import { defineChain } from "viem";
 import * as chains from "viem/chains";
 
 export type ScaffoldConfig = {
@@ -8,9 +9,27 @@ export type ScaffoldConfig = {
   onlyLocalBurnerWallet: boolean;
 };
 
+export const sensesiot = defineChain({
+  id: 7004,
+  name: "Sensesiot L2",
+  nativeCurrency: {
+    decimals: 18,
+    name: "Sense",
+    symbol: "SENSE",
+  },
+  rpcUrls: {
+    default: {
+      http: ["https://sense-rpc.jibl2.com"],
+    },
+  },
+  blockExplorers: {
+    default: { name: "Explorer", url: "https://sense.jibl2.com" },
+  },
+});
+
 const scaffoldConfig = {
   // The networks on which your DApp is live
-  targetNetworks: [chains.hardhat],
+  targetNetworks: [chains.hardhat, sensesiot, chains.jbc],
 
   // The interval at which your front-end polls the RPC servers for new data
   // it has no effect if you only target the local network (default is 4000)
