@@ -47,15 +47,15 @@ export const AddWidgetModal = ({ show, onAddWidget, onClose }: AddWidgetModalPar
 
   return (
     <>
-      <input type="checkbox" className="modal-toggle" checked={show} readOnly onChange={e => {}} />
+      <input type="checkbox" className="modal-toggle" checked={show} readOnly />
       <div className="modal" role="dialog">
         <div className="modal-box">
           <h3 className="text-lg font-bold">Add Widget</h3>
           <h6 className="font-bold my-2">Select Widget</h6>
           <div className="grid grid-flow-row grid-cols-3 gap-2">
-            {widgetConfigs.map(ele => {
+            {widgetConfigs.map((ele, i) => {
               return (
-                <button className="col-auto btn btn-sm" onClick={() => onAddWidget2(ele)}>
+                <button key={i} className="col-auto btn btn-sm" onClick={() => onAddWidget2(ele)}>
                   {ele.label}
                 </button>
               );

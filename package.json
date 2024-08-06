@@ -34,7 +34,7 @@
     "vercel:yolo": "yarn workspace @se-2/nextjs vercel:yolo",
     "verify": "yarn workspace @se-2/hardhat verify",
     "verify:jbc": "yarn workspace @se-2/hardhat verify --network jbc --api-url https://exp-l1.jibchain.net/api",
-    "verify:sensesiot": "yarn workspace @se-2/hardhat verify --sensesiot jbc --api-url https://sense.jibl2.com/api"
+    "verify:sensesiot": "yarn workspace @se-2/hardhat verify --network sensesiot --api-url https://sense.jibl2.com/api"
   },
   "devDependencies": {
     "husky": "~8.0.3",

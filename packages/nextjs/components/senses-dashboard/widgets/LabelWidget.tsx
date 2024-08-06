@@ -42,7 +42,7 @@ export const SensesLabelWidget: React.FC<SensesWidgetProps> = ({
   onMouseEnter,
   onMouseLeave,
 }) => {
-  const contentLines = widgetData.content.split("\n").map(ele => <div>{ele.replace(/ /g, "\u00A0")}</div>);
+  const contentLines = widgetData.content.split("\n").map((ele, i) => <div key={i}>{ele.replace(/ /g, "\u00A0")}</div>);
   return (
     <SensesWidgetWrapper
       editMode={editMode}

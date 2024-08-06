@@ -40,10 +40,9 @@ export const ToggleControlWidgetParamConfig: EditSettingParam = {
     address: {
       type: "address",
       name: "Address",
-      required: true,
     },
     slot: {
-      type: "bigint",
+      type: "uint256",
       name: "Slot",
       required: true,
     },

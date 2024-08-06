@@ -45,8 +45,8 @@ export type ControlSliderWidgetMetaData = {
   color?: string;
   address: string;
   slot: string;
-  min: number;
-  max: number;
+  min: string;
+  max: string;
 };
 
 export type WidgetMetaData =
@@ -58,24 +58,30 @@ export type WidgetMetaData =
   | {
       id: string;
       type: string;
-      [x: string]: any;
+      [x: string]: string;
     };
 
 export type AddWidgetParam = {
   label: string;
   type: WidgetMetaData["type"];
   defaultValues: {
-    [x: string]: any;
+    [x: string]: string;
   };
 };
 
+export type WidgetInputParamType = "string" | "string_long" | "address" | "uint256" | "number" | "color";
 export type EditSettingParam = {
   label: string;
   params: {
     [x: string]: {
-      type: "string" | "string_long" | "address" | "bigint" | "color";
+      type: WidgetInputParamType;
       name: string;
       required?: boolean;
     };
   };
+};
+
+export type DashboardData = {
+  widgets: WidgetMetaData[];
+  layouts: ReactGridLayout.Layouts;
 };
