@@ -103,7 +103,7 @@ export const useChartDataProvider = (widgets: ChartWidgetMetaData[]): ChartDataP
               newStoreData.push(targetEntry);
             }
 
-            console.log("runnerIndex", widgetIndex, runnerLastDataFrame);
+            // console.log("runnerIndex", widgetIndex, runnerLastDataFrame);
             if (
               targetEntry.data.length > size &&
               runnerLastDataFrame.some(ele => {
@@ -150,8 +150,8 @@ export const useChartDataProvider = (widgets: ChartWidgetMetaData[]): ChartDataP
         }
       }
 
-      console.log(widgetIndex, storeData);
-    }, 2000);
+      // console.log(widgetIndex, storeData);
+    }, 100);
     return () => clearInterval(id);
   }, [
     uniqueFetchableWidgets,
