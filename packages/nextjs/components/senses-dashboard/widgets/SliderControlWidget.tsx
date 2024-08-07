@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { SensesWidgetWrapper } from "./SensesWidget";
 import { parseEther } from "viem";
+import { useAccount } from "wagmi";
 import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 import { SingleDataProvider } from "~~/hooks/useDashboardDataProvder";
 import { AddWidgetParam, ControlSliderWidgetMetaData, EditSettingParam } from "~~/types/widgets";
@@ -78,12 +79,15 @@ export const SensesSliderControlWidget: React.FC<SensesWidgetProps> = ({
   onMouseEnter,
   onMouseLeave,
 }) => {
+  const { address: connectAddress } = useAccount();
+  const isEditable = connectAddress === widgetData.address;
+
   const [dataFetch, setDataFetch] = useState(false);
   const [value, setValue] = useState(50);
 
   const { writeContractAsync, isPending } = useScaffoldWriteContract("SensesJBCData");
   const applyValue = () => {
-    if (editMode) {
+    if (editMode || !isEditable) {
       return;
     }
 
@@ -128,14 +132,17 @@ export const SensesSliderControlWidget: React.FC<SensesWidgetProps> = ({
             max={widgetData.max}
             value={value}
             className="flex-1 range"
+            disabled={!isEditable}
             style={style}
             onChange={ev => {
               setValue(parseInt(ev.target.value));
             }}
           />
-          <button className="btn btn-primary btn-sm rounded-md" disabled={isPending} onClick={applyValue}>
-            Apply
-          </button>
+          {isEditable && (
+            <button className="btn btn-primary btn-sm rounded-md" disabled={isPending} onClick={applyValue}>
+              Apply
+            </button>
+          )}
         </div>
         <div className="text-center">
           {widgetData.prefix && <>{widgetData.prefix} </>}

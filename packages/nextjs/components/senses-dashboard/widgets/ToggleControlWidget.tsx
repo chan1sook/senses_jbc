@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { SensesWidgetWrapper } from "./SensesWidget";
 import { parseEther } from "viem";
+import { useAccount } from "wagmi";
 import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 import { SingleDataProvider } from "~~/hooks/useDashboardDataProvder";
 import { AddWidgetParam, ControlToggleWidgetMetaData, EditSettingParam } from "~~/types/widgets";
@@ -80,6 +81,9 @@ export const SensesToggleControlWidget: React.FC<SensesWidgetProps> = ({
   onMouseEnter,
   onMouseLeave,
 }) => {
+  const { address: connectAddress } = useAccount();
+  const isEditable = connectAddress === widgetData.address;
+
   const [dataFetch, setDataFetch] = useState(false);
   const { writeContractAsync, isPending } = useScaffoldWriteContract("SensesJBCData");
 
@@ -95,7 +99,7 @@ export const SensesToggleControlWidget: React.FC<SensesWidgetProps> = ({
   };
 
   const onClickSwitch = () => {
-    if (editMode) {
+    if (editMode || !isEditable) {
       return;
     }
 
@@ -139,7 +143,7 @@ export const SensesToggleControlWidget: React.FC<SensesWidgetProps> = ({
         <input
           type="checkbox"
           className="toggle toggle-lg"
-          disabled={isPending}
+          disabled={isPending || !isEditable}
           checked={enable}
           onClick={onClickSwitch}
           style={style}

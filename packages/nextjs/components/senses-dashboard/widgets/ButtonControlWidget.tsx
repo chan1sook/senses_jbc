@@ -2,6 +2,7 @@ import { SensesWidgetWrapper } from "./SensesWidget";
 import clsx from "clsx";
 import fContrast from "font-color-contrast";
 import { parseEther } from "viem";
+import { useAccount } from "wagmi";
 import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 import { AddWidgetParam, ControlButtonWidgetMetaData, EditSettingParam } from "~~/types/widgets";
 
@@ -65,9 +66,12 @@ export const SensesButtonControlWidget: React.FC<SensesWidgetProps> = ({
   onMouseEnter,
   onMouseLeave,
 }) => {
+  const { address: connectAddress } = useAccount();
+  const isEditable = connectAddress === widgetData.address;
+
   const { writeContractAsync, isPending } = useScaffoldWriteContract("SensesJBCData");
   const onClickBtn = () => {
-    if (editMode) {
+    if (editMode || !isEditable) {
       return;
     }
 
@@ -95,7 +99,7 @@ export const SensesButtonControlWidget: React.FC<SensesWidgetProps> = ({
         <button
           className={clsx("btn", editMode ? "pointer-events-none" : "")}
           style={style}
-          disabled={isPending}
+          disabled={isPending || !isEditable}
           onClick={onClickBtn}
         >
           {widgetData.btnText || "Click Here"}
