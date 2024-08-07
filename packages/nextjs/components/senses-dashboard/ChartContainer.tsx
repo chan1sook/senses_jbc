@@ -6,7 +6,8 @@ import { Line as LineChart } from "react-chartjs-2";
 ChartJS.register(LineElement, PointElement, LinearScale, TimeScale, Tooltip, Legend);
 
 interface ChartContainerProps {
-  label: string;
+  title?: string;
+  label?: string;
   color?: string;
   chartData: { x: number; y: number }[];
 }
@@ -22,7 +23,7 @@ export const chartDisplayFormats = {
   year: "YYYY",
 };
 
-const ChartContainer: React.FC<ChartContainerProps> = ({ label, color, chartData }) => {
+const ChartContainer: React.FC<ChartContainerProps> = ({ title, label, color, chartData }) => {
   const durationTs = 1 * 60 * 60 * 1000;
   const [now, setNow] = useState(Date.now());
   useEffect(() => {
@@ -36,7 +37,7 @@ const ChartContainer: React.FC<ChartContainerProps> = ({ label, color, chartData
   const chartRenderData = {
     datasets: [
       {
-        label: label,
+        label: label || "Chart Data",
         data: chartData,
         borderColor: color || "orange",
         borderWidth: 2,
@@ -46,7 +47,7 @@ const ChartContainer: React.FC<ChartContainerProps> = ({ label, color, chartData
   };
   return (
     <>
-      <h2 className="text-2xl text-center font-bold">Chart</h2>
+      <h2 className="text-2xl text-center font-bold">{title || "Chart"}</h2>
       <div className="relative w-full max-w-screen-md h-[300px] mx-auto">
         <LineChart
           data={chartRenderData}

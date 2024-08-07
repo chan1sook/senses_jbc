@@ -14,6 +14,7 @@ import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import { useAccount } from "wagmi";
 import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
+import { useChartDataProvider, useSingleDataProvider } from "~~/hooks/useDashboardDataProvder";
 import {
   ChartWidgetMetaData,
   ControlButtonWidgetMetaData,
@@ -21,6 +22,7 @@ import {
   ControlToggleWidgetMetaData,
   DashboardData,
   EditSettingParam,
+  FetchableWidgetMetaData,
   LabelWidgetMetaData,
   WidgetMetaData,
 } from "~~/types/widgets";
@@ -62,6 +64,13 @@ export const DashboardSubpage = ({ address, id, isNew }: { address: string; id: 
   const [currentConfigValue, setCurrentConfigValue] = useState<Partial<WidgetMetaData>>({});
 
   const cols = { lg: 8, md: 4, xs: 2 };
+
+  const chartDataProvider = useChartDataProvider(
+    dashboardData.widgets.filter(ele => ele.type === "chart") as ChartWidgetMetaData[],
+  );
+  const singleDataProvider = useSingleDataProvider(
+    dashboardData.widgets.filter(ele => ["slider", "toggle"].includes(ele.type)) as FetchableWidgetMetaData[],
+  );
 
   const toggleEditMode = () => {
     setEditDashboardData(JSON.parse(JSON.stringify(dashboardData)));
@@ -243,6 +252,7 @@ export const DashboardSubpage = ({ address, id, isNew }: { address: string; id: 
                     inner = (
                       <SensesChartWidget
                         widgetData={ele as ChartWidgetMetaData}
+                        dataProvider={chartDataProvider}
                         editMode
                         onMouseEnter={() => setHoverBtn(true)}
                         onMouseLeave={() => setHoverBtn(false)}
@@ -255,6 +265,7 @@ export const DashboardSubpage = ({ address, id, isNew }: { address: string; id: 
                     inner = (
                       <SensesToggleControlWidget
                         widgetData={ele as ControlToggleWidgetMetaData}
+                        dataProvider={singleDataProvider}
                         editMode
                         onMouseEnter={() => setHoverBtn(true)}
                         onMouseLeave={() => setHoverBtn(false)}
@@ -279,6 +290,7 @@ export const DashboardSubpage = ({ address, id, isNew }: { address: string; id: 
                     inner = (
                       <SensesSliderControlWidget
                         widgetData={ele as ControlSliderWidgetMetaData}
+                        dataProvider={singleDataProvider}
                         editMode
                         onMouseEnter={() => setHoverBtn(true)}
                         onMouseLeave={() => setHoverBtn(false)}
@@ -312,12 +324,18 @@ export const DashboardSubpage = ({ address, id, isNew }: { address: string; id: 
                     inner = <SensesLabelWidget widgetData={ele as LabelWidgetMetaData}></SensesLabelWidget>;
                     break;
                   case "chart":
-                    inner = <SensesChartWidget widgetData={ele as ChartWidgetMetaData}></SensesChartWidget>;
+                    inner = (
+                      <SensesChartWidget
+                        widgetData={ele as ChartWidgetMetaData}
+                        dataProvider={chartDataProvider}
+                      ></SensesChartWidget>
+                    );
                     break;
                   case "toggle":
                     inner = (
                       <SensesToggleControlWidget
                         widgetData={ele as ControlToggleWidgetMetaData}
+                        dataProvider={singleDataProvider}
                       ></SensesToggleControlWidget>
                     );
                     break;
@@ -332,6 +350,7 @@ export const DashboardSubpage = ({ address, id, isNew }: { address: string; id: 
                     inner = (
                       <SensesSliderControlWidget
                         widgetData={ele as ControlSliderWidgetMetaData}
+                        dataProvider={singleDataProvider}
                       ></SensesSliderControlWidget>
                     );
                     break;

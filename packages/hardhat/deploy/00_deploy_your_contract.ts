@@ -17,6 +17,13 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     log: true,
     autoMine: true,
   });
+
+  await deploy("SensesJBCData", {
+    from: deployer,
+    args: [deployer],
+    log: true,
+    autoMine: true,
+  });
 };
 
 export default deployYourContract;

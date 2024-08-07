@@ -1,11 +1,12 @@
-import { useState } from "react";
 import ChartContainer from "../ChartContainer";
 import { SensesWidgetWrapper } from "./SensesWidget";
+import { ChartDataProvider } from "~~/hooks/useDashboardDataProvder";
 import { AddWidgetParam, ChartWidgetMetaData, EditSettingParam } from "~~/types/widgets";
 
 interface SensesWidgetProps {
   widgetData: ChartWidgetMetaData;
   editMode?: boolean;
+  dataProvider?: ChartDataProvider[];
   onEditSetting?: () => void;
   onDelWidget?: () => void;
   onMouseEnter?: () => void;
@@ -18,7 +19,7 @@ export const ChartWidgetParamAddConfig: AddWidgetParam = {
   defaultValues: {
     title: "Chart",
     address: "__address__",
-    slot: "1",
+    slot: "0",
   },
 };
 
@@ -39,6 +40,10 @@ export const ChartWidgetParamConfig: EditSettingParam = {
       name: "Slot",
       required: true,
     },
+    label: {
+      type: "string",
+      name: "Data Label",
+    },
     color: {
       type: "color",
       name: "Chart Line Color",
@@ -49,14 +54,17 @@ export const ChartWidgetParamConfig: EditSettingParam = {
 export const SensesChartWidget: React.FC<SensesWidgetProps> = ({
   widgetData,
   editMode,
+  dataProvider,
   onEditSetting,
   onDelWidget,
   onMouseEnter,
   onMouseLeave,
 }) => {
-  const [chartData] = useState(
-    new Array(200).fill(undefined).map((_, i) => ({ x: Date.now() - (200 - i) * 60000, y: 20 + Math.random() * 5 })),
-  );
+  const targetData = dataProvider?.find(
+    ele => ele.slot === widgetData.slot && ele.address === widgetData.address,
+  )?.data;
+  const chartData = targetData ? targetData.map(ele => ({ x: ele.ts * 1000, y: ele.data })) : [];
+
   return (
     <SensesWidgetWrapper
       editMode={editMode}
@@ -65,7 +73,12 @@ export const SensesChartWidget: React.FC<SensesWidgetProps> = ({
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      <ChartContainer label={widgetData.title} chartData={chartData} color={widgetData.color}></ChartContainer>
+      <ChartContainer
+        title={widgetData.title}
+        label={widgetData.label}
+        chartData={chartData}
+        color={widgetData.color}
+      ></ChartContainer>
     </SensesWidgetWrapper>
   );
 };

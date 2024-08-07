@@ -1,9 +1,18 @@
-export type ChartWidgetMetaData = {
+export type WidgetMetaData = {
   id: string;
+  type: string;
+  [x: string]: string;
+};
+
+export type FetchableWidgetMetaData = WidgetMetaData & {
+  slot: string;
+  address: string;
+};
+
+export type ChartWidgetMetaData = FetchableWidgetMetaData & {
   type: "chart";
   title: string;
-  address: string;
-  slot: string;
+  label?: string;
   color?: string;
 };
 
@@ -14,52 +23,35 @@ export type LabelWidgetMetaData = {
   content: string;
 };
 
-export type ControlToggleWidgetMetaData = {
-  id: string;
+export type ControlToggleWidgetMetaData = FetchableWidgetMetaData & {
   type: "toggle";
-  address: string;
-  slot: string;
   title?: string;
   onText?: string;
   offText?: string;
+  onValue?: string;
+  offValue?: string;
   colorOn?: string;
   colorOff?: string;
 };
 
-export type ControlButtonWidgetMetaData = {
+export type ControlButtonWidgetMetaData = FetchableWidgetMetaData & {
   id: string;
   type: "btn";
-  address: string;
-  slot: string;
   title?: string;
   btnText?: string;
   color?: string;
+  value?: string;
 };
 
-export type ControlSliderWidgetMetaData = {
-  id: string;
+export type ControlSliderWidgetMetaData = FetchableWidgetMetaData & {
   type: "slider";
   title?: string;
   prefix?: string;
   suffix?: string;
   color?: string;
-  address: string;
-  slot: string;
   min: string;
   max: string;
 };
-
-export type WidgetMetaData =
-  | ChartWidgetMetaData
-  | ControlButtonWidgetMetaData
-  | ControlToggleWidgetMetaData
-  | ControlSliderWidgetMetaData
-  | LabelWidgetMetaData
-  | {
-      id: string;
-      type: string;
-      [x: string]: string;
-    };
 
 export type AddWidgetParam = {
   label: string;
